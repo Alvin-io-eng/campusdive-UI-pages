@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Campus Dive – User Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="src/output.css" rel="stylesheet">
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    updateThemeIcons();
+  }
+  
+  function updateThemeIcons() {
+    const isDark = document.documentElement.classList.contains('dark');
+    document.getElementById('icon-sun').classList.toggle('hidden', !isDark);
+    document.getElementById('icon-moon').classList.toggle('hidden', isDark);
+  }
+
+  function toggleDropdown() {
+    const menu = document.getElementById('dropdown-menu');
+    menu.classList.toggle('hidden');
+  }
+
+  function toggleMobileNav() {
+    const nav = document.getElementById('mobile-nav');
+    const overlay = document.getElementById('overlay');
+    nav.classList.toggle('open');
+    nav.classList.toggle('closed');
+    overlay.classList.toggle('hidden');
+  }
+
+  document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('avatar-dropdown');
+    if (dropdown && !dropdown.contains(e.target)) {
+      const menu = document.getElementById('dropdown-menu');
+      if (menu) menu.classList.add('hidden');
+    }
+  });
+
+  // Initialize theme on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+    updateThemeIcons();
+  });
+</script>
+<style>
+  :root { scroll-behavior: smooth; }
+
+  /* custom scrollbar */
+  .custom-scroll::-webkit-scrollbar { width: 5px; }
+  .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+  .custom-scroll::-webkit-scrollbar-thumb { background: #5D5CDE55; border-radius: 99px; }
+  .custom-scroll::-webkit-scrollbar-thumb:hover { background: #5D5CDE; }
+
+  /* Dropdown */
+  .dropdown-menu { display: none; }
+  .dropdown-trigger:focus + .dropdown-menu,
+  .dropdown-trigger:focus-within + .dropdown-menu { display: block; }
+</style>
+</head>
+
+<body class="bg-white dark:bg-bgDark text-slate-900 dark:text-white min-h-screen transition-colors duration-300">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-bgDark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 h-16 flex items-center px-4 gap-4">
+  <button class="lg:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-btnDark" onclick="toggleMobileNav()">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+  <a href="posts.html" class="text-xl font-extrabold text-brand shrink-0">Campus Dive</a>
+  <div class="hidden sm:flex flex-1 justify-center">
+    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-brand/10 text-brand border border-brand/20 tracking-wide whitespace-nowrap">TUM Tech Group · Student Developers Project</span>
+  </div>
+  <div class="flex items-center gap-2 ml-auto shrink-0">
+    <a href="posts.html" class="hidden md:block text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-brand px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-btnDark transition-colors">Home</a>
+    <a href="#" class="hidden md:block text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-brand px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-btnDark transition-colors">About</a>
+    <button onclick="toggleTheme()" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-btnDark transition-colors">
+      <svg id="icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg id="icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+    </button>
+    <button class="relative p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-btnDark transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+      <span class="notif-badge absolute -top-0.5 -right-0.5 w-4 h-4 bg-brand text-white text-[9px] font-bold rounded-full flex items-center justify-center">3</span>
+    </button>
+    <div class="relative" id="avatar-dropdown">
+      <button onclick="toggleDropdown()" class="w-8 h-8 rounded-full bg-gradient-to-br from-brand to-brandLight flex items-center justify-center text-white font-bold text-sm ring-2 ring-brand/30 hover:ring-brand/60 transition-all">A</button>
+      <div id="dropdown-menu" class="hidden absolute right-0 top-11 w-44 bg-white dark:bg-surfDark border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-50 overflow-hidden">
+        <a href="user-profile.html" class="flex items-center gap-2.5 px-4 py-2.5 text-sm hover:bg-slate-50 dark:hover:bg-btnDark transition-colors"><svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>Profile</a>
+        <a href="#" class="flex items-center gap-2.5 px-4 py-2.5 text-sm hover:bg-slate-50 dark:hover:bg-btnDark transition-colors"><svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>Settings</a>
+        <div class="border-t border-slate-100 dark:border-slate-700"></div>
+        <a href="#" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>Logout</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Nav -->
+<div id="mobile-nav" class="closed fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-surfDark border-r border-slate-200 dark:border-slate-800 p-5 pt-20 lg:hidden">
+  <nav class="space-y-1">
+    <a href="posts.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-btnDark text-sm font-medium">Home</a>
+    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-btnDark text-sm font-medium">My Groups</a>
+    <a href="user-profile.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-brand/10 text-brand font-semibold text-sm">My Profile</a>
+  </nav>
+</div>
+<div id="overlay" class="hidden fixed inset-0 z-30 bg-black/40 lg:hidden" onclick="toggleMobileNav()"></div>
+
+<!-- MAIN LAYOUT -->
+<div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-[220px_1fr_280px] gap-6">
+
+  <!-- SIDE NAV -->
+  <aside class="hidden lg:block">
+    <div class="sticky top-20 space-y-1">
+      <a href="posts.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-btnDark text-sm font-medium transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Home</a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-btnDark text-sm font-medium transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>My Groups</a>
+      <a href="user-profile.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-brand/10 text-brand font-semibold text-sm"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>My Profile</a>
+      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-btnDark text-sm font-medium transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>Settings</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="min-w-0 space-y-4">
+
+    <!-- Profile Hero -->
+    <div class="bg-slate-50 dark:bg-surfDark rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+      <!-- Cover -->
+      <div class="h-36 relative overflow-hidden" style="background: linear-gradient(135deg, #5D5CDE 0%, #7D7CFE 40%, #a78bfa 70%, #818cf8 100%);">
+        <div class="absolute inset-0" style="background: radial-gradient(ellipse at 30% 50%, #ffffff22 0%, transparent 60%);"></div>
+        <div class="absolute bottom-3 right-4 flex gap-1 opacity-30">
+          <div class="w-12 h-12 rounded-full border-2 border-white/50"></div>
+          <div class="w-8 h-8 rounded-full border-2 border-white/30 mt-4"></div>
+        </div>
+      </div>
+
+      <!-- Avatar + Info -->
+      <div class="px-5 pb-5">
+        <div class="flex items-end gap-4 -mt-10 mb-3">
+          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-brand to-brandLight border-4 border-white dark:border-bgDark flex items-center justify-center text-2xl font-extrabold text-white shadow-lg shrink-0">A</div>
+          <div class="pb-1 flex-1 min-w-0">
+            <h1 class="text-xl font-extrabold leading-tight">Alex Novak</h1>
+            <p class="text-sm text-brand font-semibold">Full-Stack Developer · TU Munich</p>
+          </div>
+          <div class="pb-1 flex gap-2 shrink-0">
+            <button class="glow-btn px-4 py-2 rounded-xl bg-brand text-white text-sm font-semibold hover:bg-brandLight transition-colors">Message</button>
+            <button class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-btnDark text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">Connect</button>
+          </div>
+        </div>
+
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">Building tools that make campus life better. Passionate about open-source, clean APIs, and scalable frontend architecture.</p>
+
+        <div class="flex items-center gap-4 flex-wrap text-xs text-slate-500 dark:text-slate-400">
+          <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Munich, Germany</span>
+          <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Informatics, 3rd Year</span>
+          <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>124 connections</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Me -->
+    <div class="bg-slate-50 dark:bg-surfDark rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+      <h2 class="text-sm font-bold mb-3 text-slate-800 dark:text-white">About Me</h2>
+      <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">I'm a third-year informatics student at TU Munich with a deep interest in building developer tools and collaborative platforms. I've been contributing to the Campus Dive project since its inception, focusing primarily on the frontend architecture and API layer. Outside of code, I enjoy coffee-fueled hackathons, contributing to open-source, and teaching web development to first-year students.</p>
+    </div>
+
+    <!-- Skills Cards -->
+    <div class="bg-slate-50 dark:bg-surfDark rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+      <h2 class="text-sm font-bold mb-4 text-slate-800 dark:text-white">Skills & Experience</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+        <!-- CONNECT card -->
+        <div class="skill-card p-4 rounded-xl bg-white dark:bg-btnDark border border-slate-100 dark:border-slate-700 hover:border-brand/40">
+          <div class="w-10 h-10 rounded-xl bg-brand/15 text-brand flex items-center justify-center mb-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m9.032 4.026a3 3 0 10-5.716.001M6.684 13.342a3 3 0 105.716.001"/></svg>
+          </div>
+          <p class="text-sm font-bold mb-1">CONNECT</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-snug">React · TypeScript · TailwindCSS · Next.js</p>
+          <div class="mt-2 flex gap-1 flex-wrap">
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-brand/10 text-brand font-semibold">Expert</span>
+          </div>
+        </div>
+
+        <!-- COLLABORATE card -->
+        <div class="skill-card p-4 rounded-xl bg-white dark:bg-btnDark border border-slate-100 dark:border-slate-700 hover:border-emerald-500/40">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+          </div>
+          <p class="text-sm font-bold mb-1">COLLABORATE</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-snug">Python · FastAPI · PostgreSQL · Docker</p>
+          <div class="mt-2 flex gap-1 flex-wrap">
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold">Advanced</span>
+          </div>
+        </div>
+
+        <!-- GROW card -->
+        <div class="skill-card p-4 rounded-xl bg-white dark:bg-btnDark border border-slate-100 dark:border-slate-700 hover:border-amber-500/40">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <p class="text-sm font-bold mb-1">GROW</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-snug">Git · CI/CD · AWS · Agile/Scrum</p>
+          <div class="mt-2 flex gap-1 flex-wrap">
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 font-semibold">Proficient</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Recent Posts -->
+    <div>
+      <h2 class="text-sm font-bold mb-3 px-1 text-slate-800 dark:text-white">Recent Posts</h2>
+
+      <article class="post-card bg-slate-50 dark:bg-surfDark rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden mb-4">
+        <div class="flex items-center gap-3 p-4 pb-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand to-brandLight flex items-center justify-center text-white font-bold text-sm shrink-0">A</div>
+          <div class="flex-1 min-w-0">
+            <a href="#" class="font-bold text-sm text-brand hover:underline">Alex Novak</a>
+            <p class="text-xs text-slate-500 dark:text-slate-400">3h ago</p>
+          </div>
+        </div>
+        <div class="img-placeholder mx-4 rounded-xl h-44 flex items-center justify-center mb-3">
+          <svg class="w-10 h-10 text-slate-500 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+        </div>
+        <div class="flex items-center gap-1 px-4 pb-3">
+          <button class="action-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-500 dark:text-slate-400 text-sm font-medium"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/></svg><span>31</span></button>
+          <a href="single-post.html" class="action-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-500 dark:text-slate-400 text-sm font-medium"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span>Comment</span></a>
+          <button class="action-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-500 dark:text-slate-400 text-sm font-medium"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m9.032 4.026a3 3 0 10-5.716.001M6.684 13.342a3 3 0 105.716.001"/></svg><span>Share</span></button>
+        </div>
+        <div class="px-4 pb-4 border-t border-slate-100 dark:border-slate-800 pt-3">
+          <p class="text-sm text-slate-700 dark:text-slate-300">Shipped a new CLI tool for quick Campus Dive setup. One command and you're ready 🛠️ Link in bio.</p>
+          <button class="mt-2 text-xs text-brand font-semibold hover:underline">View 11 comments →</button>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- WIDGETS -->
+  <aside class="hidden lg:block">
+    <div class="sticky top-20 space-y-5">
+
+      <!-- Personal Projects -->
+      <div class="bg-slate-50 dark:bg-surfDark rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="text-sm font-bold text-slate-800 dark:text-white tracking-wide">PERSONAL PROJECTS</h3>
+        </div>
+        <ul class="divide-y divide-slate-100 dark:divide-slate-800">
+          <li class="px-4 py-3">
+            <div class="flex items-center gap-2 mb-0.5">
+              <span class="text-xs font-bold text-brand">Campus Dive</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-semibold">Live</span>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Student collaboration platform. React + FastAPI.</p>
+          </li>
+          <li class="px-4 py-3">
+            <div class="flex items-center gap-2 mb-0.5">
+              <span class="text-xs font-bold text-sky-600 dark:text-sky-400">DevDash CLI</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 font-semibold">Beta</span>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Terminal dashboard for student devs. Python.</p>
+          </li>
+          <li class="px-4 py-3">
+            <div class="flex items-center gap-2 mb-0.5">
+              <span class="text-xs font-bold text-violet-600 dark:text-violet-400">TUM Course API</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-semibold">WIP</span>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Unofficial REST API for TUM course data.</p>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="bg-slate-50 dark:bg-surfDark rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800">
+          <h3 class="text-sm font-bold text-slate-800 dark:text-white tracking-wide">RECENT ACTIVITY</h3>
+        </div>
+        <ul class="divide-y divide-slate-100 dark:divide-slate-800">
+          <li class="px-4 py-3 flex gap-2.5 items-start">
+            <div class="w-6 h-6 rounded-full bg-brand/15 text-brand flex items-center justify-center shrink-0 mt-0.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/></svg></div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-snug">Liked <span class="text-brand font-semibold">Lena's post</span> about the dashboard</p>
+          </li>
+          <li class="px-4 py-3 flex gap-2.5 items-start">
+            <div class="w-6 h-6 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-snug">Joined <span class="text-emerald-600 dark:text-emerald-400 font-semibold">AI/ML Research</span> group</p>
+          </li>
+          <li class="px-4 py-3 flex gap-2.5 items-start">
+            <div class="w-6 h-6 rounded-full bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0 mt-0.5"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg></div>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-snug">Commented on <span class="text-sky-600 dark:text-sky-400 font-semibold">Kofi's ML post</span></p>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </aside>
+
+</div>
+
+<script>
+  const html = document.documentElement;
+  const savedTheme = localStorage.getItem('cd-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(savedTheme ? savedTheme === 'dark' : prefersDark);
+  function applyTheme(dark) {
+    html.classList.toggle('dark', dark);
+    document.getElementById('icon-sun').classList.toggle('hidden', !dark);
+    document.getElementById('icon-moon').classList.toggle('hidden', dark);
+  }
+  function toggleTheme() {
+    const isDark = html.classList.contains('dark');
+    applyTheme(!isDark);
+    localStorage.setItem('cd-theme', isDark ? 'light' : 'dark');
+  }
+  function toggleDropdown() { document.getElementById('dropdown-menu').classList.toggle('hidden'); }
+  document.addEventListener('click', (e) => {
+    const dd = document.getElementById('avatar-dropdown');
+    if (!dd.contains(e.target)) document.getElementById('dropdown-menu').classList.add('hidden');
+  });
+  function toggleMobileNav() {
+    const nav = document.getElementById('mobile-nav');
+    const overlay = document.getElementById('overlay');
+    const isOpen = nav.classList.contains('open');
+    nav.classList.toggle('open', !isOpen);
+    nav.classList.toggle('closed', isOpen);
+    overlay.classList.toggle('hidden', isOpen);
+  }
+</script>
+
+</body>
+</html>
